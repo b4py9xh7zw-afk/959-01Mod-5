@@ -14,7 +14,7 @@ class User {
     
     public function create($data) {
         $sql = "INSERT INTO users (username, email, password_hash, role, created_at) 
-                VALUES (:username, :email, :password_hash, :role, NOW())";
+                VALUES (:username, :email, :password_hash, :role, CURRENT_TIMESTAMP)";
         
         $params = [
             ':username' => $data['username'],

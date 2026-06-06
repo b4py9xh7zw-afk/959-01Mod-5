@@ -6,16 +6,19 @@
 require_once __DIR__ . '/AuthController.php';
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/License.php';
+require_once __DIR__ . '/../models/SeatBorrow.php';
 
 class DashboardController {
     private $authController;
     private $userModel;
     private $licenseModel;
+    private $seatBorrowModel;
     
     public function __construct() {
         $this->authController = new AuthController();
         $this->userModel = new User();
         $this->licenseModel = new License();
+        $this->seatBorrowModel = new SeatBorrow();
     }
     
     public function index() {
@@ -31,11 +34,17 @@ class DashboardController {
             'total_users' => $this->userModel->count()
         ];
         
+        $seatStats = $this->seatBorrowModel->getSeatStats();
+        
+        $pendingApprovals = [];
         if ($role === 'admin') {
+            $pendingApprovals = $this->seatBorrowModel->findAll(5, 0, 'pending');
             $recentLicenses = $this->licenseModel->findAll(10, 0);
         } else {
             $recentLicenses = $this->licenseModel->findByUserId($userId, 10, 0);
         }
+        
+        $myBorrows = $this->seatBorrowModel->findByBorrowerId($userId, 5, 0);
         
         require_once __DIR__ . '/../views/dashboard/index.php';
     }

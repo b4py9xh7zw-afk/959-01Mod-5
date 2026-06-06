@@ -38,6 +38,16 @@ $routes = [
     'licenses/view' => ['controller' => 'LicenseController', 'action' => 'view'],
     'licenses/update' => ['controller' => 'LicenseController', 'action' => 'update'],
     'licenses/delete' => ['controller' => 'LicenseController', 'action' => 'delete'],
+    'seats' => ['controller' => 'SeatBorrowController', 'action' => 'index'],
+    'seats/seats' => ['controller' => 'SeatBorrowController', 'action' => 'seats'],
+    'seats/create' => ['controller' => 'SeatBorrowController', 'action' => 'create'],
+    'seats/view' => ['controller' => 'SeatBorrowController', 'action' => 'view'],
+    'seats/approve' => ['controller' => 'SeatBorrowController', 'action' => 'approve'],
+    'seats/reject' => ['controller' => 'SeatBorrowController', 'action' => 'reject'],
+    'seats/return' => ['controller' => 'SeatBorrowController', 'action' => 'returnSeat'],
+    'seats/renew' => ['controller' => 'SeatBorrowController', 'action' => 'renew'],
+    'seats/approve-renew' => ['controller' => 'SeatBorrowController', 'action' => 'approveRenew'],
+    'seats/reject-renew' => ['controller' => 'SeatBorrowController', 'action' => 'rejectRenew'],
 ];
 
 // Default route

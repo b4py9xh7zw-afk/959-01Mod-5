@@ -54,6 +54,33 @@ require_once __DIR__ . '/../layouts/header.php';
                     <option value="expired">已过期</option>
                 </select>
             </div>
+
+            <div>
+                <label for="license_type" class="block text-sm font-medium text-gray-700 mb-2">许可证类型</label>
+                <select 
+                    id="license_type" 
+                    name="license_type"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                    onchange="toggleSeatStatus()"
+                >
+                    <option value="floating">浮动授权（可借用）</option>
+                    <option value="fixed">固定授权（不可借用）</option>
+                </select>
+                <p class="mt-1 text-xs text-gray-500">浮动授权可以在部门/项目之间借用，固定授权专属于用户</p>
+            </div>
+
+            <div id="seat_status_div">
+                <label for="seat_status" class="block text-sm font-medium text-gray-700 mb-2">席位状态</label>
+                <select 
+                    id="seat_status" 
+                    name="seat_status"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                >
+                    <option value="idle">空闲</option>
+                    <option value="borrowed">借出</option>
+                    <option value="abnormal">异常占用</option>
+                </select>
+            </div>
             
             <div>
                 <label for="expires_at" class="block text-sm font-medium text-gray-700 mb-2">过期时间（可选）</label>
@@ -82,5 +109,26 @@ require_once __DIR__ . '/../layouts/header.php';
         </form>
     </div>
 </div>
+
+<script>
+function toggleSeatStatus() {
+    const licenseType = document.getElementById('license_type').value;
+    const seatStatusDiv = document.getElementById('seat_status_div');
+    const seatStatusSelect = document.getElementById('seat_status');
+    
+    if (licenseType === 'fixed') {
+        seatStatusDiv.classList.add('opacity-50');
+        seatStatusSelect.value = 'idle';
+        seatStatusSelect.disabled = true;
+    } else {
+        seatStatusDiv.classList.remove('opacity-50');
+        seatStatusSelect.disabled = false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    toggleSeatStatus();
+});
+</script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

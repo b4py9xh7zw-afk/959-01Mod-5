@@ -25,12 +25,18 @@ class LicenseController {
             $productName = $_POST['product_name'] ?? '';
             $userId = $_POST['user_id'] ?? $_SESSION['user_id'];
             $status = $_POST['status'] ?? 'active';
+            $licenseType = $_POST['license_type'] ?? 'floating';
+            $seatStatus = $_POST['seat_status'] ?? 'idle';
             $expiresAt = $_POST['expires_at'] ?? null;
             
             if (empty($productName)) {
                 $_SESSION['error'] = '产品名称是必填项';
                 header('Location: /licenses/create');
                 exit;
+            }
+            
+            if ($licenseType === 'fixed') {
+                $seatStatus = 'idle';
             }
             
             // Only admins can assign licenses to other users
@@ -45,6 +51,8 @@ class LicenseController {
                     'user_id' => $userId,
                     'product_name' => $productName,
                     'status' => $status,
+                    'license_type' => $licenseType,
+                    'seat_status' => $seatStatus,
                     'expires_at' => $expiresAt ?: null
                 ]);
                 
@@ -136,6 +144,15 @@ class LicenseController {
             }
             if (isset($_POST['user_id'])) {
                 $data['user_id'] = $_POST['user_id'];
+            }
+            if (isset($_POST['license_type'])) {
+                $data['license_type'] = $_POST['license_type'];
+                if ($_POST['license_type'] === 'fixed') {
+                    $data['seat_status'] = 'idle';
+                }
+            }
+            if (isset($_POST['seat_status']) && (!isset($_POST['license_type']) || $_POST['license_type'] !== 'fixed')) {
+                $data['seat_status'] = $_POST['seat_status'];
             }
             
             $this->licenseModel->update($id, $data);
