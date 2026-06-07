@@ -94,7 +94,7 @@ try {
                 license_id INTEGER NOT NULL,
                 department_id INTEGER NOT NULL,
                 borrower_id INTEGER NOT NULL,
-                approver_id INTEGER NOT NULL,
+                approver_id INTEGER NULL,
                 purpose TEXT NOT NULL,
                 start_date DATETIME NOT NULL,
                 end_date DATETIME NOT NULL,
@@ -107,7 +107,7 @@ try {
                 FOREIGN KEY (license_id) REFERENCES licenses(id) ON DELETE CASCADE,
                 FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
                 FOREIGN KEY (borrower_id) REFERENCES users(id) ON DELETE CASCADE,
-                FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE CASCADE
+                FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE SET NULL
             )
         ");
         $db->execute("CREATE INDEX IF NOT EXISTS idx_seat_borrows_license_id ON seat_borrows(license_id)");
@@ -122,7 +122,7 @@ try {
                 license_id INT NOT NULL,
                 department_id INT NOT NULL,
                 borrower_id INT NOT NULL,
-                approver_id INT NOT NULL,
+                approver_id INT NULL,
                 purpose TEXT NOT NULL,
                 start_date DATETIME NOT NULL,
                 end_date DATETIME NOT NULL,
@@ -135,7 +135,7 @@ try {
                 FOREIGN KEY (license_id) REFERENCES licenses(id) ON DELETE CASCADE,
                 FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
                 FOREIGN KEY (borrower_id) REFERENCES users(id) ON DELETE CASCADE,
-                FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE SET NULL,
                 INDEX idx_license_id (license_id),
                 INDEX idx_department_id (department_id),
                 INDEX idx_borrower_id (borrower_id),

@@ -77,7 +77,7 @@ class SeatBorrowController {
                 exit;
             }
             
-            $approverId = $_SESSION['role'] === 'admin' ? $_SESSION['user_id'] : 0;
+            $approverId = $_SESSION['role'] === 'admin' ? $_SESSION['user_id'] : null;
             $status = $_SESSION['role'] === 'admin' ? 'approved' : 'pending';
             
             try {

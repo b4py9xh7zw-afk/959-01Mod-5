@@ -46,15 +46,22 @@ require_once __DIR__ . '/../layouts/header.php';
                     <select id="department_id" name="department_id" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                         <option value="">请选择部门或项目</option>
-                        <?php foreach ($departments as $dept): ?>
-                            <option value="<?php echo $dept['id']; ?>">
-                                <?php echo htmlspecialchars($dept['name']); ?>
-                                <?php if ($dept['description']): ?>
-                                    (<?php echo htmlspecialchars($dept['description']); ?>)
-                                <?php endif; ?>
-                            </option>
-                        <?php endforeach; ?>
+                        <?php if (empty($departments)): ?>
+                            <option value="" disabled>暂无可用的部门/项目，请联系管理员添加</option>
+                        <?php else: ?>
+                            <?php foreach ($departments as $dept): ?>
+                                <option value="<?php echo $dept['id']; ?>">
+                                    <?php echo htmlspecialchars($dept['name']); ?>
+                                    <?php if ($dept['description']): ?>
+                                        (<?php echo htmlspecialchars($dept['description']); ?>)
+                                    <?php endif; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </select>
+                    <?php if (empty($departments)): ?>
+                        <p class="mt-1 text-sm text-red-500">⚠️ 暂无可用部门，请先在系统设置中添加部门</p>
+                    <?php endif; ?>
                 </div>
 
                 <?php if ($_SESSION['role'] === 'admin'): ?>

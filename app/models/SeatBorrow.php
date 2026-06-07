@@ -41,7 +41,8 @@ class SeatBorrow {
             $this->db->execute($sql, $params);
             $borrowId = $this->db->lastInsertId();
             
-            $this->addHistory($borrowId, 'created', $data['approver_id'], '创建借用申请');
+            $operatorId = $data['approver_id'] ?? $data['borrower_id'];
+            $this->addHistory($borrowId, 'created', $operatorId, '创建借用申请');
             
             if (($data['status'] ?? 'pending') === 'approved') {
                 $this->licenseModel->update($data['license_id'], ['seat_status' => 'borrowed']);
@@ -375,6 +376,11 @@ class SeatBorrow {
     }
     
     public function isLicenseAvailable($licenseId, $startDate, $endDate, $excludeBorrowId = null) {
+        $license = $this->licenseModel->findById($licenseId);
+        if (!$license || $license['license_type'] !== 'floating' || $license['seat_status'] !== 'idle') {
+            return false;
+        }
+        
         $sql = "SELECT COUNT(*) as count FROM seat_borrows 
                 WHERE license_id = :license_id 
                 AND status IN ('pending', 'approved', 'active', 'renew_pending')
@@ -402,6 +408,7 @@ class SeatBorrow {
                 LEFT JOIN users u ON l.user_id = u.id
                 WHERE l.license_type = 'floating' 
                 AND l.status = 'active'
+                AND l.seat_status = 'idle'
                 AND l.id NOT IN (
                     SELECT license_id FROM seat_borrows 
                     WHERE status IN ('pending', 'approved', 'active', 'renew_pending')

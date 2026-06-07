@@ -57,7 +57,7 @@ try {
             license_id INTEGER NOT NULL,
             department_id INTEGER NOT NULL,
             borrower_id INTEGER NOT NULL,
-            approver_id INTEGER NOT NULL,
+            approver_id INTEGER NULL,
             purpose TEXT NOT NULL,
             start_date DATETIME NOT NULL,
             end_date DATETIME NOT NULL,
@@ -70,7 +70,7 @@ try {
             FOREIGN KEY (license_id) REFERENCES licenses(id) ON DELETE CASCADE,
             FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
             FOREIGN KEY (borrower_id) REFERENCES users(id) ON DELETE CASCADE,
-            FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE CASCADE
+            FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE SET NULL
         )",
         "CREATE INDEX IF NOT EXISTS idx_seat_borrows_license_id ON seat_borrows(license_id)",
         "CREATE INDEX IF NOT EXISTS idx_seat_borrows_department_id ON seat_borrows(department_id)",
